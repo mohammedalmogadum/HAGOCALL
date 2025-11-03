@@ -1,4 +1,4 @@
-name: Build Android HTML App
+name: Build HTML Android App
 
 on:
   push:
@@ -6,27 +6,41 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
+    - name: Setup JDK
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Gradle permissions
-      run: chmod +x ./gradlew
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v3
 
-    - name: Build Debug APK
+    - name: Build APK
       run: ./gradlew assembleDebug
 
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v3
+    - name: Upload APK as Artifact
+      uses: actions/upload-artifact@v4
       with:
-        name: Android-HTML-App
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: html-app-apk
+        path: app/build/outputs/apk/debug/*.apk
+
+  download-apk:
+    runs-on: ubuntu-latest
+    needs: build-apk
+
+    steps:
+    - name: Download Built APK
+      uses: actions/download-artifact@v4
+      with:
+        name: html-app-apk
+        path: downloaded-apk/
+
+    - name: List APK File
+      run: ls -R downloaded-apk
