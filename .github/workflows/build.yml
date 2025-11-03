@@ -19,8 +19,11 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Install Android SDK
+    - name: Setup Android SDK
       uses: android-actions/setup-android@v3
+
+    - name: Give Gradle execute permission
+      run: chmod +x ./gradlew
 
     - name: Build APK
       run: ./gradlew assembleDebug
@@ -36,11 +39,11 @@ jobs:
     needs: build-apk
 
     steps:
-    - name: Download Built APK
+    - name: Download APK Artifact
       uses: actions/download-artifact@v4
       with:
         name: html-app-apk
         path: downloaded-apk/
 
-    - name: List APK File
+    - name: List downloaded APK
       run: ls -R downloaded-apk
