@@ -1,0 +1,8 @@
+{
+  "name": "HAGO - Secure Messenger",
+  "description": "A high-fidelity prototype of a secure social media application for messaging, voice, and video calls, with registration simulated via phone number. This app demonstrates a modern, secure chat UI/UX.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
